@@ -9,6 +9,7 @@ cd Claident-0.9.2025.05.10 || exit $?
 export PREFIX=$CURDIR || exit $?
 make -j$NCPU || exit $?
 make install 2> /dev/null || sudo make install || exit $?
+cp *.sh *.fasta .. || exit $?
 cd ..
 #save date
 export date=`TZ=JST-9 date +%Y.%m.%d`
