@@ -9,9 +9,19 @@ cd Claident-0.9.2025.05.10 || exit $?
 export PREFIX=$CURDIR || exit $?
 make -j$NCPU || exit $?
 make install 2> /dev/null || sudo make install || exit $?
+cd ..
+#save date
+export date=`TZ=JST-9 date +%Y.%m.%d`
+export dateiso=`TZ=JST-9 date +%Y-%m-%d`
+#make UCHIME DBs
+sh uchimedb_mitochondrion.sh &
+sh uchimedb_plastid.sh &
 #fetch required files
-sh fetchNCBITAXDB.sh || exit $?
-sh fetchNCBIBLASTDB.sh || exit $?
+sh fetchNCBITAXDB.sh &
+sh fetchNCBIBLASTDB.sh &
+wait
+#generate references
+sh generate_references.sh || exit $?
 #make BLAST DBs and Taxonomy DBs
 sh make_overall_class.sh || exit $?
 sh make_animals_mt_genus.sh &
@@ -32,12 +42,11 @@ sh make_animals_D-loop_genus.sh &
 sh make_plants_rbcL_genus.sh &
 sh make_plants_trnH-psbA_genus.sh &
 wait
-#make UCHIME DBs
-sh uchimedb_mitochondrion.sh &
-sh uchimedb_plastid.sh &
-wait
 #make archive files
-sh compressBLASTDB.sh
-sh compressTAXDB.sh
-sh compressUCHIMEDB.sh
-cd ..
+sh compressBLASTDB.sh || exit $?
+sh compressTAXDB.sh || exit $?
+sh compressUCHIMEDB.sh || exit $?
+#make scripts
+for f in `ls uploadDB.sh installDB_*.sh | grep -oP '^[^\.]+'`
+do perl -npe "s/YYYY\\.MM\\.DD/${date}/g;s/YYYY\\-MM\\-DD/${dateiso}/g" $f.sh > $f-v0.1.${date}.sh
+done
