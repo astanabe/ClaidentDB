@@ -3,9 +3,9 @@ NCPU=`grep -c processor /proc/cpuinfo` || exit $?
 #install requirements
 sudo apt install -y ncbi-blast+ vsearch coreutils tar gzip pigz bzip2 pbzip2 xz-utils unzip wget curl aria2 emboss || exit $?
 #install claident
-wget -nv -c -O Claident-0.9.2025.05.10.tar.gz https://github.com/astanabe/Claident/archive/refs/tags/v0.9.2025.05.10.tar.gz || exit $?
-tar -xzf Claident-0.9.2025.05.10.tar.gz || exit $?
-cd Claident-0.9.2025.05.10 || exit $?
+wget -nv -c -O Claident-master.tar.gz https://github.com/astanabe/Claident/archive/refs/heads/master.tar.gz || exit $?
+tar -xzf Claident-master.tar.gz || exit $?
+cd Claident-master || exit $?
 export PREFIX=$CURDIR || exit $?
 make -j$NCPU || exit $?
 make install 2> /dev/null || sudo make install || exit $?
@@ -49,5 +49,5 @@ sh compressTAXDB.sh || exit $?
 sh compressUCHIMEDB.sh || exit $?
 #make scripts
 for f in `ls uploadDB.sh installDB_*.sh | grep -oP '^[^\.]+'`
-do perl -npe "s/YYYY\\.MM\\.DD/${date}/g;s/YYYY\\-MM\\-DD/${dateiso}/g" $f.sh > $f-v0.1.${date}.sh
+do perl -npe "s/YYYY\\.MM\\.DD/${date}/g;s/YYYY\\-MM\\-DD/${dateiso}/g" $f.sh > $f-0.9.${date}.sh
 done

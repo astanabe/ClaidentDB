@@ -2,12 +2,12 @@ if test -z $PREFIX; then
 export PREFIX=/usr/local || exit $?
 fi
 # dowload
-aria2c -c https://github.com/astanabe/ClaidentDB/releases/download/v0.1.YYYY.MM.DD/downloadDB-v0.1.YYYY.MM.DD.sh || exit $?
-sh downloadDB-v0.1.YYYY.MM.DD.sh || exit $?
+aria2c -c https://github.com/astanabe/ClaidentDB/releases/download/v0.9.YYYY.MM.DD/downloadDB-0.9.YYYY.MM.DD.sh || exit $?
+sh downloadDB-0.9.YYYY.MM.DD.sh || exit $?
 # check and install UCHIME databases
 if ! test -e .cdu; then
-gsha256sum -c uchimedb-v0.1.YYYY.MM.DD.tar.xz.sha256 || exit $?
-gtar -xJf uchimedb-v0.1.YYYY.MM.DD.tar.xz || exit $?
+gsha256sum -c uchimedb-0.9.YYYY.MM.DD.tar.xz.sha256 || exit $?
+gtar -xJf uchimedb-0.9.YYYY.MM.DD.tar.xz || exit $?
 mkdir -p $PREFIX/share/claident/uchimedb 2> /dev/null || sudo mkdir -p $PREFIX/share/claident/uchimedb || exit $?
 for db in cdu12s cdu16s cducox1 cducytb cdudloop cdumatk cdurbcl cdutrnhpsba
 do
@@ -15,15 +15,15 @@ $PREFIX/share/claident/bin/vsearch --dbmask none --makeudb_usearch $db.fasta --o
 chmod 644 $db.fasta $db.udb || exit $?
 mv -f $db.fasta $db.udb $PREFIX/share/claident/uchimedb/ 2> /dev/null || sudo mv -f $db.fasta $db.udb $PREFIX/share/claident/uchimedb/ || exit $?
 done
-rm -f uchimedb-v0.1.YYYY.MM.DD.tar.xz.sha256 || exit $?
-rm -f uchimedb-v0.1.YYYY.MM.DD.tar.xz || exit $?
+rm -f uchimedb-0.9.YYYY.MM.DD.tar.xz.sha256 || exit $?
+rm -f uchimedb-0.9.YYYY.MM.DD.tar.xz || exit $?
 echo 'UCHIME databases were installed correctly!'
 touch .cdu || exit $?
 fi
 # check and install taxonomy databases
 if ! test -e .taxdb; then
-gsha256sum -c taxdb-v0.1.YYYY.MM.DD.tar.xz.sha256 || exit $?
-gtar -xJf taxdb-v0.1.YYYY.MM.DD.tar.xz || exit $?
+gsha256sum -c taxdb-0.9.YYYY.MM.DD.tar.xz.sha256 || exit $?
+gtar -xJf taxdb-0.9.YYYY.MM.DD.tar.xz || exit $?
 mkdir -p $PREFIX/share/claident/taxdb 2> /dev/null || sudo mkdir -p $PREFIX/share/claident/taxdb || exit $?
 rm -f $PREFIX/share/claident/taxdb/animals_12S_genus.taxdb 2> /dev/null || sudo rm -f $PREFIX/share/claident/taxdb/animals_12S_genus.taxdb
 rm -f $PREFIX/share/claident/taxdb/animals_12S_species_wsp.taxdb 2> /dev/null || sudo rm -f $PREFIX/share/claident/taxdb/animals_12S_species_wsp.taxdb
@@ -173,15 +173,15 @@ rm -f $PREFIX/share/claident/taxdb/overall_species_man.taxdb 2> /dev/null || sud
 rm -f $PREFIX/share/claident/taxdb/overall_species_wosp_man.taxdb 2> /dev/null || sudo rm -f $PREFIX/share/claident/taxdb/overall_species_wosp_man.taxdb
 chmod 666 *.taxdb 2> /dev/null || sudo chmod 666 *.taxdb || exit $?
 mv -f *.taxdb $PREFIX/share/claident/taxdb/ 2> /dev/null || sudo mv -f *.taxdb $PREFIX/share/claident/taxdb/ || exit $?
-rm taxdb-v0.1.YYYY.MM.DD.tar.xz.sha256 || exit $?
-rm taxdb-v0.1.YYYY.MM.DD.tar.xz || exit $?
+rm taxdb-0.9.YYYY.MM.DD.tar.xz.sha256 || exit $?
+rm taxdb-0.9.YYYY.MM.DD.tar.xz || exit $?
 touch .taxdb || exit $?
 echo 'The taxonomy databases were installed correctly!'
 fi
 # check and install BLAST databases
 if ! test -e .blastdb; then
-gsha256sum -c blastdb-v0.1.YYYY.MM.DD.tar.xz.sha256 || exit $?
-ls blastdb-v0.1.YYYY.MM.DD.tar.xz *.blastdb-v0.1.YYYY.MM.DD.tar.xz | xargs -P 4 -I {} sh -c 'gtar -xJf {} || exit $?' || exit $?
+gsha256sum -c blastdb-0.9.YYYY.MM.DD.tar.xz.sha256 || exit $?
+ls blastdb-0.9.YYYY.MM.DD.tar.xz *.blastdb-0.9.YYYY.MM.DD.tar.xz | xargs -P 4 -I {} sh -c 'gtar -xJf {} || exit $?' || exit $?
 mkdir -p $PREFIX/share/claident/blastdb 2> /dev/null || sudo mkdir -p $PREFIX/share/claident/blastdb || exit $?
 rm -f $PREFIX/share/claident/blastdb/animals_12S_genus.* 2> /dev/null || sudo rm -f $PREFIX/share/claident/blastdb/animals_12S_genus.*
 rm -f $PREFIX/share/claident/blastdb/animals_12S_species_wsp.* 2> /dev/null || sudo rm -f $PREFIX/share/claident/blastdb/animals_12S_species_wsp.*
@@ -331,8 +331,8 @@ rm -f $PREFIX/share/claident/blastdb/overall_species_man.* 2> /dev/null || sudo 
 rm -f $PREFIX/share/claident/blastdb/overall_species_wosp_man.* 2> /dev/null || sudo rm -f $PREFIX/share/claident/blastdb/overall_species_wosp_man.*
 mv -f overall_class.???.n?? $PREFIX/share/claident/blastdb/ 2> /dev/null || sudo mv -f overall_class.???.n?? $PREFIX/share/claident/blastdb/ || exit $?
 mv -f *.bsl *.nal $PREFIX/share/claident/blastdb/ 2> /dev/null || sudo mv -f *.bsl *.nal $PREFIX/share/claident/blastdb/ || exit $?
-rm -f blastdb-v0.1.YYYY.MM.DD.tar.xz.sha256 || exit $?
-rm -f blastdb-v0.1.YYYY.MM.DD.tar.xz *.blastdb-v0.1.YYYY.MM.DD.tar.xz || exit $?
+rm -f blastdb-0.9.YYYY.MM.DD.tar.xz.sha256 || exit $?
+rm -f blastdb-0.9.YYYY.MM.DD.tar.xz *.blastdb-0.9.YYYY.MM.DD.tar.xz || exit $?
 touch .blastdb || exit $?
 echo 'The BLAST databases were installed correctly!'
 fi
