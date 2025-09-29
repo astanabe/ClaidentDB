@@ -21,8 +21,11 @@ sh uchimedb_plastid.sh &
 sh fetchNCBITAXDB.sh &
 sh fetchNCBIBLASTDB.sh &
 wait
+#dump acc_taxid
+sh dumpacctaxid.sh &
 #generate references
-sh generate_references.sh || exit $?
+sh generate_references.sh &
+wait
 #make BLAST DBs and Taxonomy DBs
 sh make_overall_class.sh || exit $?
 sh make_animals_mt_genus.sh &
