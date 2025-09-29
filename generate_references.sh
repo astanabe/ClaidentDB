@@ -31,7 +31,7 @@ for locus in LSU SSU
 do vsearch --fasta_width 0 --notrunclabels --threads $NCPU --minseqlength 100 --wordlength 9 --id 0.7 --qmask none --strand both --cluster_fast SILVA_138.2_${locus}Ref_NR99_tax_silva_Eukaryota.fasta --centroids references_eukaryota_$locus.fasta
 done
 # Extract Prokaryota
-clfilterseq --keyword="Bacteria|Archaea" -n=$NCPU --minlen=100 SILVA_138.2_SSURef_NR99_tax_silva.fasta SILVA_138.2_SSURef_NR99_tax_silva_Prokaryota.fasta
+clfilterseq --keyword="Bacteria|Archaea" -n=$NCPU --minlen=100 SILVA_138.2_SSURef_NR99_tax_silva.fasta SILVA_138.2_16SRef_NR99_tax_silva_Prokaryota.fasta
 # Cluster
 for locus in 16S
 do vsearch --fasta_width 0 --notrunclabels --threads $NCPU --minseqlength 100 --wordlength 9 --id 0.7 --qmask none --strand both --cluster_fast SILVA_138.2_${locus}Ref_NR99_tax_silva_Prokaryota.fasta --centroids references_prokaryota_$locus.fasta
