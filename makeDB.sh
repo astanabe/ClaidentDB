@@ -2,15 +2,6 @@ CURDIR=`pwd` || exit $?
 NCPU=`grep -c processor /proc/cpuinfo` || exit $?
 #install requirements
 sudo apt install -y ncbi-blast+ vsearch coreutils tar gzip pigz bzip2 pbzip2 xz-utils unzip wget curl aria2 emboss || exit $?
-#install claident
-wget -nv -c -O Claident-master.tar.gz https://github.com/astanabe/Claident/archive/refs/heads/master.tar.gz || exit $?
-tar -xzf Claident-master.tar.gz || exit $?
-cd Claident-master || exit $?
-export PREFIX=$CURDIR || exit $?
-make -j$NCPU || exit $?
-make install 2> /dev/null || sudo make install || exit $?
-cp *.sh *.fasta .. || exit $?
-cd ..
 #save date
 export date=`TZ=JST-9 date +%Y.%m.%d`
 export dateiso=`TZ=JST-9 date +%Y-%m-%d`
