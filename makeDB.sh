@@ -1,4 +1,3 @@
-CURDIR=`pwd` || exit $?
 NCPU=`grep -c processor /proc/cpuinfo` || exit $?
 #install requirements
 sudo apt install -y ncbi-blast+ vsearch coreutils tar gzip pigz bzip2 pbzip2 xz-utils unzip wget curl aria2 emboss || exit $?
