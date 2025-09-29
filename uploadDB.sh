@@ -8,7 +8,7 @@ NCPU=`grep -c processor /proc/cpuinfo` || exit $?
 
 # Make download scripts
 rm -f downloadDB-${buildno}.sh || exit $?
-for asset_file in install*-${buildno}.sh *.sha256 *.xz
+for asset_file in *.sha256 *.xz
 do echo "aria2c -c https://github.com/${user_name}/${repo_name}/releases/download/${tag_name}/${asset_file}" >> downloadDB-${buildno}.sh
 done
 
@@ -42,7 +42,7 @@ upload_url=`echo "${response}" | jq '. | .upload_url' | tr -d '"'`
 upload_url="${upload_url%%\{*}?name="
 
 # Perform upload
-for asset_file in downloadDB-${buildno}.sh install*-${buildno}.sh *.sha256 *.xz
+for asset_file in downloadDB-${buildno}.sh installDB_*-${buildno}.sh *.sha256 *.xz
 do curl -L \
   -X POST \
   -H "Accept: application/vnd.github+json" \
