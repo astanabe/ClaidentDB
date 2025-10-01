@@ -8,9 +8,9 @@ export dateiso=`TZ=JST-9 date +%Y-%m-%d`
 sh uchimedb_mitochondrion.sh &
 sh uchimedb_plastid.sh &
 #fetch required files
-sh fetchNCBITAXDB.sh &
 sh fetchNCBIBLASTDB.sh &
 wait
+sh fetchNCBITAXDB.sh &
 #dump acc_taxid
 sh dumpacctaxid.sh &
 #generate references
