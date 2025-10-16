@@ -181,7 +181,10 @@ fi
 # check and install BLAST databases
 if ! test -e .blastdb; then
 sha256sum -c blastdb-0.9.YYYY.MM.DD.tar.xz.sha256 || exit $?
-ls blastdb-0.9.YYYY.MM.DD.tar.xz *.blastdb-0.9.YYYY.MM.DD.tar.xz | xargs -P 4 -I {} sh -c 'tar -xJf {} || exit $?' || exit $?
+ls blastdb-0.9.YYYY.MM.DD.tar.xz *.blastdb-0.9.YYYY.MM.DD.tar.xz | xargs -P 4 -I {} sh -c 'tar -xJf {} || exit $?'
+if test $? -ne 0; then
+exit $?
+fi
 mkdir -p $PREFIX/share/claident/blastdb 2> /dev/null || sudo mkdir -p $PREFIX/share/claident/blastdb || exit $?
 rm -f $PREFIX/share/claident/blastdb/animals_12S_genus.* 2> /dev/null || sudo rm -f $PREFIX/share/claident/blastdb/animals_12S_genus.*
 rm -f $PREFIX/share/claident/blastdb/animals_12S_species_wsp.* 2> /dev/null || sudo rm -f $PREFIX/share/claident/blastdb/animals_12S_species_wsp.*

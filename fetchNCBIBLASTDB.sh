@@ -1,9 +1,5 @@
 # Set number of processor cores used for computation
 export NCPU=`grep -c processor /proc/cpuinfo`
-# Set PREFIX
-if test -z $PREFIX; then
-PREFIX=/usr/local || exit $?
-fi
 # Get nt database files from NCBI
 mkdir -p blastdb || exit $?
 cd blastdb || exit $?
@@ -30,10 +26,16 @@ fi
 aria2c -c https://ftp.ncbi.nih.gov/blast/db/taxdb.tar.gz.md5 || exit $?
 aria2c -c https://ftp.ncbi.nih.gov/blast/db/taxdb.tar.gz || exit $?
 # Check files
-ls *.md5 | xargs -P $NCPU -I {} sh -c "md5sum -c {} || exit $?" || exit $?
+ls *.md5 | xargs -P $NCPU -I {} sh -c "md5sum -c {} || exit $?"
+if test $? -ne 0; then
+exit $?
+fi
 rm *.md5 || exit $?
 # Extract files
-ls *.tar.gz | xargs -P $NCPU -I {} sh -c "tar -xzf {} || exit $?" || exit $?
+ls *.tar.gz | xargs -P $NCPU -I {} sh -c "tar -xzf {} || exit $?"
+if test $? -ne 0; then
+exit $?
+fi
 # Delete files
 chmod 644 *.tar.gz 2> /dev/null || sudo chmod 644 *.tar.gz 2> /dev/null
 rm -f *.tar.gz || sudo rm -f *.tar.gz
