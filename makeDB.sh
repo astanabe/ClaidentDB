@@ -19,23 +19,21 @@ wait
 #make BLAST DBs and Taxonomy DBs
 sh make_overall_class.sh || exit $?
 sh make_animals_mt_genus.sh &
-sh make_eukaryota_LSU_genus.sh &
 sh make_fungi_all_genus.sh &
 sh make_plants_cp_genus.sh &
-sh make_prokaryota_16S_genus.sh &
 wait
-sh make_animals_12S_genus.sh &
-sh make_eukaryota_SSU_genus.sh &
-sh make_fungi_ITS_genus.sh &
-sh make_plants_matK_genus.sh &
-wait
-sh make_animals_16S_genus.sh &
-sh make_animals_COX1_genus.sh &
-sh make_animals_CytB_genus.sh &
-sh make_animals_D-loop_genus.sh &
-sh make_plants_rbcL_genus.sh &
-sh make_plants_trnH-psbA_genus.sh &
-wait
+sh make_animals_12S_genus.sh || exit $?
+sh make_animals_16S_genus.sh || exit $?
+sh make_animals_COX1_genus.sh || exit $?
+sh make_animals_CytB_genus.sh || exit $?
+sh make_animals_D-loop_genus.sh || exit $?
+sh make_eukaryota_LSU_genus.sh || exit $?
+sh make_eukaryota_SSU_genus.sh || exit $?
+sh make_fungi_ITS_genus.sh || exit $?
+sh make_plants_matK_genus.sh || exit $?
+sh make_plants_rbcL_genus.sh || exit $?
+sh make_plants_trnH-psbA_genus.sh || exit $?
+sh make_prokaryota_16S_genus.sh || exit $?
 #make archive files
 sh compressBLASTDB.sh || exit $?
 sh compressTAXDB.sh || exit $?

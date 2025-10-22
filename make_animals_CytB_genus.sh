@@ -23,7 +23,7 @@ cat animals_mitogenomes.txt >> animals_CytB1.txt || exit $?
 #BLASTDB=`pwd` blastdb_aliastool -dbtype nucl -db nt -seqidlist animals_genus.bsl -out animals_genus -title animals_genus || exit $?
 #cd .. || exit $?
 # search by reference sequences
-clblastseq blastn -db `pwd`/blastdb/animals_genus -word_size 9 -evalue 1e-5 -strand plus -task blastn -max_target_seqs 10000000 end --output=ACCESSION --numthreads=$NCPU --hyperthreads=8 references_animals_CytB.fasta animals_CytB2.txt || exit $?
+clblastseq blastn -db `pwd`/blastdb/animals_genus -word_size 9 -evalue 1e-3 -strand plus -task blastn -max_target_seqs 10000000 end --output=ACCESSION --numthreads=$NCPU --hyperthreads=8 references_animals_CytB.fasta animals_CytB2.txt || exit $?
 # eliminate duplicate entries
 clelimdupacc animals_CytB1.txt animals_CytB2.txt animals_CytB.txt || exit $?
 # extract identified sequences

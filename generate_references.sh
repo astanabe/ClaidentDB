@@ -12,10 +12,13 @@ for locus in matK rbcL
 do vsearch --fasta_width 0 --notrunclabels --threads $NCPU --minseqlength 100 --wordlength 9 --id 0.9 --qmask none --strand both --cluster_fast uchimedb/$locus\_dereplicated.fasta --centroids references_plants_$locus.fasta
 done
 for locus in trnH-psbA
-do vsearch --fasta_width 0 --notrunclabels --threads $NCPU --minseqlength 100 --wordlength 9 --id 0.8 --qmask none --strand both --cluster_fast uchimedb/$locus\_dereplicated.fasta --centroids references_plants_$locus.fasta
+do vsearch --fasta_width 0 --notrunclabels --threads $NCPU --minseqlength 100 --wordlength 9 --id 0.7 --qmask none --strand both --cluster_fast uchimedb/$locus\_dereplicated.fasta --centroids references_plants_$locus.fasta
 done
-for locus in 12S 16S COX1 CytB D-loop
-do vsearch --fasta_width 0 --notrunclabels --threads $NCPU --minseqlength 100 --wordlength 9 --id 0.7 --qmask none --strand both --cluster_fast uchimedb/$locus\_dereplicated.fasta --centroids references_animals_$locus.fasta
+for locus in 12S COX1 CytB
+do vsearch --fasta_width 0 --notrunclabels --threads $NCPU --minseqlength 100 --wordlength 9 --id 0.6 --qmask none --strand both --cluster_fast uchimedb/$locus\_dereplicated.fasta --centroids references_animals_$locus.fasta
+done
+for locus in 16S D-loop
+do vsearch --fasta_width 0 --notrunclabels --threads $NCPU --minseqlength 100 --wordlength 9 --id 0.5 --qmask none --strand both --cluster_fast uchimedb/$locus\_dereplicated.fasta --centroids references_animals_$locus.fasta
 done
 # Download SILVA NR99
 wget -c https://www.arb-silva.de/fileadmin/silva_databases/release_138.2/Exports/SILVA_138.2_LSURef_NR99_tax_silva.fasta.gz
@@ -36,3 +39,6 @@ clfilterseq --keyword="Bacteria|Archaea" -n=$NCPU --minlen=100 SILVA_138.2_SSURe
 for locus in 16S
 do vsearch --fasta_width 0 --notrunclabels --threads $NCPU --minseqlength 100 --wordlength 9 --id 0.7 --qmask none --strand both --cluster_fast SILVA_138.2_${locus}Ref_NR99_tax_silva_Prokaryota.fasta --centroids references_prokaryota_$locus.fasta
 done
+# Download Full UNITE+INSD dataset for Fungi from https://dx.doi.org/10.15156/BIO/3301227
+# Cluster
+vsearch --fasta_width 0 --notrunclabels --threads $NCPU --minseqlength 100 --wordlength 9 --id 0.5 --qmask none --strand both --cluster_fast UNITE_public_19.02.2025.fasta.gz --centroids references_fungi_ITS.fasta

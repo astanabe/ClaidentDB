@@ -20,7 +20,7 @@ BLASTDB=`pwd` blastdb_aliastool -seqid_dbtype nucl -seqid_db nt -seqid_file_in p
 BLASTDB=`pwd` blastdb_aliastool -dbtype nucl -db nt -seqidlist prokaryota_genus.bsl -out prokaryota_genus -title prokaryota_genus || exit $?
 cd .. || exit $?
 # search by reference sequences
-clblastseq blastn -db `pwd`/blastdb/prokaryota_genus -word_size 9 -evalue 1e-5 -strand plus -task blastn -max_target_seqs 10000000 end --output=ACCESSION --numthreads=$NCPU --hyperthreads=8 references_prokaryota_16S.fasta prokaryota_16S2.txt || exit $?
+clblastseq blastn -db `pwd`/blastdb/prokaryota_genus -word_size 9 -evalue 1e-4 -strand plus -task blastn -max_target_seqs 10000000 end --output=ACCESSION --numthreads=$NCPU --hyperthreads=8 references_prokaryota_16S.fasta prokaryota_16S2.txt || exit $?
 # eliminate duplicate entries
 clelimdupacc prokaryota_16S1.txt prokaryota_16S2.txt prokaryota_16S.txt || exit $?
 # extract identified sequences

@@ -20,7 +20,7 @@ clretrieveacc --keywords='"ddbj embl genbank"[Filter] AND (txid2759[Organism:exp
 #BLASTDB=`pwd` blastdb_aliastool -dbtype nucl -db nt -seqidlist eukaryota_genus.bsl -out eukaryota_genus -title eukaryota_genus || exit $?
 #cd .. || exit $?
 # search by reference sequences
-clblastseq blastn -db `pwd`/blastdb/eukaryota_genus -word_size 9 -evalue 1e-5 -strand plus -task blastn -max_target_seqs 10000000 end --output=ACCESSION --numthreads=$NCPU --hyperthreads=16 references_eukaryota_SSU.fasta eukaryota_SSU2.txt || exit $?
+clblastseq blastn -db `pwd`/blastdb/eukaryota_genus -word_size 9 -evalue 1e-4 -strand plus -task blastn -max_target_seqs 10000000 end --output=ACCESSION --numthreads=$NCPU --hyperthreads=8 references_eukaryota_SSU.fasta eukaryota_SSU2.txt || exit $?
 # eliminate duplicate entries
 clelimdupacc eukaryota_SSU1.txt eukaryota_SSU2.txt eukaryota_SSU.txt || exit $?
 # extract identified sequences

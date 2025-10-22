@@ -22,7 +22,7 @@ BLASTDB=`pwd` blastdb_aliastool -seqid_dbtype nucl -seqid_db nt -seqid_file_in p
 BLASTDB=`pwd` blastdb_aliastool -dbtype nucl -db nt -seqidlist plants_genus.bsl -out plants_genus -title plants_genus || exit $?
 cd .. || exit $?
 # search by reference sequences
-clblastseq blastn -db `pwd`/blastdb/plants_genus -word_size 11 -evalue 1e-15 -strand plus -task blastn -max_target_seqs 10000000 end --output=ACCESSION --numthreads=$NCPU --hyperthreads=8 references_plants_matK.fasta plants_matK2.txt || exit $?
+clblastseq blastn -db `pwd`/blastdb/plants_genus -word_size 11 -evalue 1e-5 -strand plus -task blastn -max_target_seqs 10000000 end --output=ACCESSION --numthreads=$NCPU --hyperthreads=8 references_plants_matK.fasta plants_matK2.txt || exit $?
 # eliminate duplicate entries
 clelimdupacc plants_matK1.txt plants_matK2.txt plants_matK.txt || exit $?
 # extract identified sequences

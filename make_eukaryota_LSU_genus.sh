@@ -20,7 +20,7 @@ BLASTDB=`pwd` blastdb_aliastool -seqid_dbtype nucl -seqid_db nt -seqid_file_in e
 BLASTDB=`pwd` blastdb_aliastool -dbtype nucl -db nt -seqidlist eukaryota_genus.bsl -out eukaryota_genus -title eukaryota_genus || exit $?
 cd .. || exit $?
 # search by reference sequences
-clblastseq blastn -db `pwd`/blastdb/eukaryota_genus -word_size 9 -evalue 1e-5 -strand plus -task blastn -max_target_seqs 10000000 end --output=ACCESSION --numthreads=$NCPU --hyperthreads=8 references_eukaryota_LSU.fasta eukaryota_LSU2.txt || exit $?
+clblastseq blastn -db `pwd`/blastdb/eukaryota_genus -word_size 9 -evalue 1e-4 -strand plus -task blastn -max_target_seqs 10000000 end --output=ACCESSION --numthreads=$NCPU --hyperthreads=8 references_eukaryota_LSU.fasta eukaryota_LSU2.txt || exit $?
 # eliminate duplicate entries
 clelimdupacc eukaryota_LSU1.txt eukaryota_LSU2.txt eukaryota_LSU.txt || exit $?
 # extract identified sequences

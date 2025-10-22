@@ -9,8 +9,8 @@ fi
 export PATH=$PREFIX/bin:$PREFIX/share/claident/bin:$PATH
 # search by keywords at INSD
 clretrieveacc --keywords='"ddbj embl genbank"[Filter] AND (txid4751[Organism:exp] AND 150:1000000000000[Sequence Length] AND (ITS1[Title] OR ITS2[Title] OR "internal transcribed spacer"[Title] OR "internal transcribed spacers"[Title]) NOT environmental[Title] NOT uncultured[Title] NOT unclassified[Title] NOT unidentified[Title] NOT metagenome[Title] NOT metagenomic[Title])' fungi_ITS1.txt || exit $?
-# search by primer sequences
-clblastprimer blastn -db `pwd`/blastdb/fungi_all_genus -word_size 9 -evalue 1e-1 -perc_identity 90 -strand plus -task blastn-short -ungapped -dust no -max_target_seqs 100000000 end --numthreads=$NCPU --hyperthreads=8 primers_fungi_ITS.fasta fungi_ITS2.txt || exit $?
+# search by reference sequences
+clblastseq blastn -db `pwd`/blastdb/fungi_all_genus -word_size 9 -evalue 1e-2 -strand plus -task blastn -max_target_seqs 10000000 end --output=ACCESSION --numthreads=$NCPU --hyperthreads=8 references_fungi_ITS.fasta fungi_ITS2.txt || exit $?
 # eliminate duplicate entries
 clelimdupacc fungi_ITS1.txt fungi_ITS2.txt fungi_ITS.txt || exit $?
 # extract identified sequences
