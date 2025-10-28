@@ -4,12 +4,17 @@ repo_name="ClaidentDB"
 date="YYYY.MM.DD"
 tag_name=`echo "${date}" | perl -npe 's/(\d{4})\.(\d\d)\.(\d\d)/v0.9.$1.$2.$3/'`
 buildno=`echo "${date}" | perl -npe 's/(\d{4})\.(\d\d)\.(\d\d)/0.9.$1.$2.$3/'`
-NCPU=`grep -c processor /proc/cpuinfo` || exit $?
 
 # Make download scripts
 rm -f downloadDB-${buildno}.sh || exit $?
-for asset_file in *.sha256 *.xz
+for asset_file in taxdb-${buildno}.tar.xz.sha256 taxdb-${buildno}.tar.xz blastdb-${buildno}.tar.xz.sha256 blastdb-${buildno}.tar.xz overall_class.*.blastdb-${buildno}.tar.xz
 do echo "aria2c -c https://github.com/${user_name}/${repo_name}/releases/download/${tag_name}/${asset_file}" >> downloadDB-${buildno}.sh
+done
+
+# Make download scripts
+rm -f downloadUCHIMEDB-${buildno}.sh || exit $?
+for asset_file in uchimedb-${buildno}.tar.xz.sha256 uchimedb-${buildno}.tar.xz
+do echo "aria2c -c https://github.com/${user_name}/${repo_name}/releases/download/${tag_name}/${asset_file}" >> downloadUCHIMEDB-${buildno}.sh
 done
 
 # Get release list
@@ -42,7 +47,7 @@ upload_url=`echo "${response}" | jq '. | .upload_url' | tr -d '"'`
 upload_url="${upload_url%%\{*}?name="
 
 # Perform upload
-for asset_file in downloadDB-${buildno}.sh installDB_*-${buildno}.sh *.sha256 *.xz
+for asset_file in downloadDB-${buildno}.sh downloadUCHIMEDB-${buildno}.sh installDB_*-${buildno}.sh installUCHIMEDB_*-${buildno}.sh *.sha256 *.xz
 do curl -L \
   -X POST \
   -H "Accept: application/vnd.github+json" \

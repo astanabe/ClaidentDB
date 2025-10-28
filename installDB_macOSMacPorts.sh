@@ -1,25 +1,11 @@
+# set variables
+NCPU=`sysctl -n hw.logicalcpu_max`
 if test -z $PREFIX; then
-export PREFIX=/usr/local || exit $?
+PREFIX=/usr/local || exit $?
 fi
 # dowload
 aria2c -c https://github.com/astanabe/ClaidentDB/releases/download/v0.9.YYYY.MM.DD/downloadDB-0.9.YYYY.MM.DD.sh || exit $?
 sh downloadDB-0.9.YYYY.MM.DD.sh || exit $?
-# check and install UCHIME databases
-if ! test -e .cdu; then
-gsha256sum -c uchimedb-0.9.YYYY.MM.DD.tar.xz.sha256 || exit $?
-gnutar -xJf uchimedb-0.9.YYYY.MM.DD.tar.xz || exit $?
-mkdir -p $PREFIX/share/claident/uchimedb 2> /dev/null || sudo mkdir -p $PREFIX/share/claident/uchimedb || exit $?
-for db in cdu12s cdu16s cducox1 cducytb cdudloop cdumatk cdurbcl cdutrnhpsba
-do
-$PREFIX/share/claident/bin/vsearch --dbmask none --makeudb_usearch $db.fasta --output $db.udb || exit $?
-chmod 644 $db.fasta $db.udb || exit $?
-mv -f $db.fasta $db.udb $PREFIX/share/claident/uchimedb/ 2> /dev/null || sudo mv -f $db.fasta $db.udb $PREFIX/share/claident/uchimedb/ || exit $?
-done
-rm -f uchimedb-0.9.YYYY.MM.DD.tar.xz.sha256 || exit $?
-rm -f uchimedb-0.9.YYYY.MM.DD.tar.xz || exit $?
-echo 'UCHIME databases were installed correctly!'
-touch .cdu || exit $?
-fi
 # check and install taxonomy databases
 if ! test -e .taxdb; then
 gsha256sum -c taxdb-0.9.YYYY.MM.DD.tar.xz.sha256 || exit $?
@@ -180,10 +166,17 @@ echo 'The taxonomy databases were installed correctly!'
 fi
 # check and install BLAST databases
 if ! test -e .blastdb; then
-gsha256sum -c blastdb-0.9.YYYY.MM.DD.tar.xz.sha256 || exit $?
-ls blastdb-0.9.YYYY.MM.DD.tar.xz *.blastdb-0.9.YYYY.MM.DD.tar.xz | xargs -P 4 -I {} sh -c 'gnutar -xJf {} || exit $?'
-if test $? -ne 0; then
-exit $?
+cat blastdb-0.9.YYYY.MM.DD.tar.xz.sha256 | xargs -P $NCPU -I {} sh -c 'echo "{}" | gsha256sum -c'
+ERR=$?
+if test $ERR -ne 0; then
+echo 'ERROR!: Checksum does not match! Please delete erroneous file(s) and rerun this script.' >&2
+exit $ERR
+fi
+ls blastdb-0.9.YYYY.MM.DD.tar.xz *.blastdb-0.9.YYYY.MM.DD.tar.xz | xargs -P 4 gnutar -xJf
+ERR=$?
+if test $ERR -ne 0; then
+echo 'ERROR!: Cannot extract archive file(s). Please check your disk space and heath.' >&2
+exit $ERR
 fi
 mkdir -p $PREFIX/share/claident/blastdb 2> /dev/null || sudo mkdir -p $PREFIX/share/claident/blastdb || exit $?
 rm -f $PREFIX/share/claident/blastdb/animals_12S_genus.* 2> /dev/null || sudo rm -f $PREFIX/share/claident/blastdb/animals_12S_genus.*

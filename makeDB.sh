@@ -1,9 +1,12 @@
-NCPU=`grep -c processor /proc/cpuinfo` || exit $?
 #install requirements
-sudo apt install -y ncbi-blast+ vsearch coreutils tar gzip pigz bzip2 pbzip2 xz-utils unzip wget curl aria2 emboss || exit $?
+sudo apt install -y ncbi-blast+ vsearch coreutils grep tar gzip pigz bzip2 pbzip2 xz-utils unzip wget curl aria2 emboss jq || exit $?
 #save date
 export date=`TZ=JST-9 date +%Y.%m.%d`
 export dateiso=`TZ=JST-9 date +%Y-%m-%d`
+#set number of CPU cores
+export NCPU=`grep -c processor /proc/cpuinfo` || exit $?
+#configure maximum number of fileopens
+ulimit -Sn `ulimit -Hn`
 #make UCHIME DBs
 sh uchimedb_mitochondrion.sh &
 sh uchimedb_plastid.sh &
@@ -39,6 +42,6 @@ sh compressBLASTDB.sh || exit $?
 sh compressTAXDB.sh || exit $?
 sh compressUCHIMEDB.sh || exit $?
 #make scripts
-for f in `ls uploadDB.sh installDB_*.sh | grep -oP '^[^\.]+'`
+for f in `ls uploadDB.sh installDB_*.sh installUCHIMEDB_*.sh | grep -oP '^[^\.]+'`
 do perl -npe "s/YYYY\\.MM\\.DD/${date}/g;s/YYYY\\-MM\\-DD/${dateiso}/g" $f.sh > $f-0.9.${date}.sh
 done
