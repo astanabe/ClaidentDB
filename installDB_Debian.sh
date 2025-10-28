@@ -172,7 +172,7 @@ if test $ERR -ne 0; then
 echo 'ERROR!: Checksum does not match! Please delete erroneous file(s) and rerun this script.' >&2
 exit $ERR
 fi
-ls blastdb-0.9.YYYY.MM.DD.tar.xz *.blastdb-0.9.YYYY.MM.DD.tar.xz | xargs -P 4 tar -xJf
+ls blastdb-0.9.YYYY.MM.DD.tar.xz *.blastdb-0.9.YYYY.MM.DD.tar.xz | xargs -P 4 -L 1 tar -xJf
 ERR=$?
 if test $ERR -ne 0; then
 echo 'ERROR!: Cannot extract archive file(s). Please check your disk space and heath.' >&2
