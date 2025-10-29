@@ -42,6 +42,6 @@ sh compressBLASTDB.sh || exit $?
 sh compressTAXDB.sh || exit $?
 sh compressUCHIMEDB.sh || exit $?
 #make scripts
-for f in `ls uploadDB.sh installDB_*.sh installUCHIMEDB_*.sh | grep -oP '^[^\.]+'`
+for f in `ls uploadDB.sh checkDB.sh installDB_*.sh installUCHIMEDB_*.sh | grep -oP '^[^\.]+'`
 do perl -npe "s/YYYY\\.MM\\.DD/${date}/g;s/YYYY\\-MM\\-DD/${dateiso}/g" $f.sh > $f-0.9.${date}.sh
 done
