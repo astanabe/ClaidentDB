@@ -13,5 +13,9 @@ fi
 export PATH=$PREFIX/bin:$PREFIX/share/claident/bin:$PATH
 # Compress Taxonomy DB
 chmod 666 *.taxdb
-tar -c --use-compress-program="xz -T 0 -9e" -f taxdb-0.9.${date}.tar.xz *_*_genus.taxdb overall_*.taxdb
+rm -f templist.txt
+for p in `ls *_*_genus.taxdb | grep -P -o '^[^_]+_[^_]+_'`; do ls $p*.taxdb >> templist.txt; done
+ls overall_*.taxdb >> templist.txt
+tar -c --use-compress-program="xz -T 0 -9e" -f taxdb-0.9.${date}.tar.xz -T templist.txt
+rm -f templist.txt
 sha256sum taxdb-0.9.${date}.tar.xz > taxdb-0.9.${date}.tar.xz.sha256

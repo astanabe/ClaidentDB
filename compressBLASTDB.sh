@@ -17,10 +17,14 @@ ls overall_class.*.nsq | grep -o -P '^.+\.' | xargs -P $(($NCPU / 4)) -I {} sh -
 if test $? -ne 0; then
 exit $?
 fi
-tar -c --use-compress-program="xz -T 0 -9e" -f ../blastdb-0.9.${date}.tar.xz *_*_genus.bsl *_*_genus.nal overall_*.bsl overall_*.nal
+rm -f templist.txt
+for p in `ls *_*_genus.nal | grep -o -P '^[^_]+_[^_]+_'`; do ls $p*.bsl $p*.nal >> templist.txt; done
+ls overall_*.bsl overall_*.nal >> templist.txt
+tar -c --use-compress-program="xz -T 0 -9e" -f ../blastdb-0.9.${date}.tar.xz -T templist.txt
+rm -f templist.txt
 cd ..
 ls blastdb-0.9.${date}.tar.xz *.blastdb-0.9.${date}.tar.xz | xargs -P $NCPU -I {} sh -c 'sha256sum {} > {}.sha256'
 if test $? -ne 0; then
 exit $?
 fi
-for f in `ls *.blastdb-0.9.${date}.tar.xz.sha256`; do cat $f >> blastdb-0.9.${date}.tar.xz.sha256; rm $f; done
+for f in *.blastdb-0.9.${date}.tar.xz.sha256; do cat $f >> blastdb-0.9.${date}.tar.xz.sha256; rm $f; done
